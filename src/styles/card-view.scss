@@ -1,0 +1,28 @@
+.card-view{
+    min-width: 1500px;
+    max-width: 1500px;
+    margin: auto;
+
+
+    .card-content {
+        display: inline-block;
+        margin: .5rem;  
+        opacity: 1;
+
+        cursor: pointer;
+        
+        &.hidden {
+            // visibility: hidden;
+
+            transition: .5s;
+            opacity: 0;
+        }
+
+        &.open {
+            pointer-events: none;
+            cursor: default;
+        }
+
+    }
+
+}

@@ -1,0 +1,35 @@
+
+.card {
+    perspective: 800px;
+
+    .card-content {
+        border: 1px solid rgb(45, 45, 59);
+        border-radius: 7px;
+        // box-shadow: 5px 10px 8px #888888;
+        width: 275px;
+        height: 180px;
+        // backface-visibility: hidden;
+        box-shadow: 0 10px 35px rgba(50, 50, 93, 0.1), 0 2px 15px rgba(0, 0, 0, 0.07);
+        // background: url("./images/bg.jpg");
+    
+        &.turning{
+            transform: rotateY(90deg);
+            border: 1px solid rgb(45, 45, 59);
+            box-shadow: 0px 0px 0px #888888;
+            transition: 1s;
+        }
+        &.turned{
+            transform: rotateY(180deg);
+            border: 1px solid rgb(45, 45, 59);
+            box-shadow: 0px 0px 0px #888888;
+            // transition-delay: 2s;
+            transition: 1s;
+        }
+        &.turningBack{
+            transform: rotateY(-1deg);
+            border: 1px solid rgb(45, 45, 59);
+            box-shadow: 0px 0px 0px #888888;
+            transition: 1s;
+        }
+    }    
+}

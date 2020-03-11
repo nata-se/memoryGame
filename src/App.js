@@ -1,16 +1,23 @@
-import React from 'react';
-import './App.css';
-import Card from './Card.js'
+import React from 'react'
+import './styles/App.scss'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-          <Card />       
-        
-      </header>
-    </div>
-  );
+import classnames from 'classnames'
+import CardView from './CardView.js'
+
+
+
+export default class App extends React.Component{
+
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          
+        </header>
+        <div> 
+          <CardView onClickCount={this.handleClickCount} />
+        </div> 
+      </div>
+    )
+  }
 }
-
-export default App;
