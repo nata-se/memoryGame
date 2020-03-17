@@ -8,10 +8,10 @@ import ImgGroup  from './ImgGroup.js'
 import ImgGroup2 from './ImgGroup2.js'
 import ImgGroup3 from './ImgGroup3.js'
 import CheckboxContainer from './checkboxes/CheckboxContainer.js'
+import checkboxes from './checkboxes/checkboxes.js'
 
 
-
-function getCardImageGroup(group) {
+function randomizeImageGroup(group) {
   return group.sort(() => {
     return Math.random() > .5
       ? 1
@@ -19,23 +19,21 @@ function getCardImageGroup(group) {
   })
 }
 
-
 const initialState = {
   card1: null,
   card2: null,
   hiddenCards:[],
   clickCounter: 0,
-  cardImagesGroup: getCardImageGroup(ImgGroup),
+  cardImagesGroup: randomizeImageGroup(ImgGroup),
+  checkedItems: [ checkboxes[0] ],
+  cardInMotion: false,
 }
-
-
 
 export default class CardView extends React.Component {
   state = { ...initialState }
 
- 
-
   handlClick = (imageDescriptor) => {
+    setTimeout(() => {  }, 800)
     this.setState({ clickCounter: ++this.state.clickCounter }, () => {
       this.props.onClickCount && this.props.onClickCount(this.state.clickCounter)
     })
@@ -75,14 +73,16 @@ export default class CardView extends React.Component {
   }
 
   resetAll = () => {
-    this.setState({ ...initialState, hiddenCards: [], cardImagesGroup: getCardImageGroup() }, () => {
+    const checkedItems = this.state.checkedItems
+
+    const groups = this.getGroupsByCheckedItems(checkedItems)    
+
+    this.setState({ ...initialState, checkedItems, hiddenCards: [], cardImagesGroup: randomizeImageGroup(groups) }, () => {
       this.props.onClickCount && this.props.onClickCount(this.state.clickCounter)
     }) 
   }
 
-  handleSelectionChange = (checkedItems) => {
-    console.log(checkedItems)
-
+  getGroupsByCheckedItems = (checkedItems) => {
     let groups = []
 
     for (let i=0; i<checkedItems.length; i++) {
@@ -95,19 +95,39 @@ export default class CardView extends React.Component {
       }
     }
 
-    this.setState({ ...initialState, hiddenCards: [], cardImagesGroup: getCardImageGroup(groups) }, () => {
+    return groups
+  }
+
+  handleSelectionChange = (checkedItems) => {
+    const groups = this.getGroupsByCheckedItems(checkedItems)
+
+    this.setState({ ...initialState, hiddenCards: [], cardImagesGroup: randomizeImageGroup(groups), checkedItems }, () => {
       console.log(this.state)
     })
   }
 
-  render() {
-    return (
-      <div className="card-view" >     
-        <CheckboxContainer onSelectionChange={this.handleSelectionChange} myProps={2} />
+  handleCardInMotion = (isMotion) => {
+    this.setState({ cardInMotion: isMotion })
+  }
 
-        <button onClick={this.resetAll}>Play Againe</button>
+  render() {
+    const { checkedItems, cardInMotion, card1, card2 } = this.state
+  
+    const disabled  = cardInMotion || (card1 && card2)
+    const className = classnames('card-view', { disabled })
+
+    return (
+      <div className={className} >     
+        <CheckboxContainer onSelectionChange={this.handleSelectionChange} checkedItems={checkedItems} />
+
+        <button type="button" className="btn btn-primary" onClick={this.resetAll} >Play Again</button>
         
-        <h1>you have clicked  {this.state.clickCounter}  times</h1>
+        {/* <h1>you have clicked  {this.state.clickCounter}  times</h1> */}
+        <div className="click-counter">
+          <div>you have clicked</div>
+          <div className="count">{this.state.clickCounter}</div>
+          <div>times</div>
+        </div>
   
           {
             this.state.cardImagesGroup.map((imageDescriptor) => {
@@ -122,9 +142,13 @@ export default class CardView extends React.Component {
               const className = classnames('card-content', { hidden, open: isOpen })
 
               return (
-              <div className={className} key={imageDescriptor.id} onClick={onClick}>
-                <Card image={imageDescriptor.image} isOpen={isOpen}/>
-              </div>
+                <div className={className} key={imageDescriptor.id} onClick={onClick}>
+                  <Card
+                    image={imageDescriptor.image}
+                    isOpen={isOpen}
+                    onInMotion={this.handleCardInMotion}
+                  />
+                </div>
             )})
           }
 

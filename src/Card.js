@@ -1,26 +1,33 @@
-import React from 'react';
+import './styles/card.scss'
+
+import React      from 'react'
+import PropTypes  from 'prop-types'
 import classnames from 'classnames'
 
 import bground from './images/bg.jpg'
-import './styles/Card.scss';
+
+const TRANSITION_DELAY = 200
 
 export default class Card extends React.Component {
+    static propTypes = {
+        onInMotion: PropTypes.func.isRequired,
+    }
+
     state = {
-        turning:  false,
-        turningBack:  false,
-        turned:   false,
-        urlImage: bground,
+        turning:     false,
+        turningBack: false,
+        turned:      false,
+        urlImage:    bground,
     }
 
     componentDidUpdate(prevProps){
         if (prevProps.isOpen !== this.props.isOpen){
             this.toggleTurn()
         }
-        
     }
 
     toggleTurn = () => {
-        // let image = `./images/game1/cat.jpg`        
+        this.props.onInMotion(true)
 
         if (this.state.turned) {
             this.setState({
@@ -30,38 +37,38 @@ export default class Card extends React.Component {
     
             setTimeout(() => {
                 this.setState({ urlImage: bground, turned:  false, })
-            }, 1000)
+            }, TRANSITION_DELAY)
             setTimeout(() => {
                 this.setState({ turningBack: true, turning: false,})
-            }, 1000)
+            }, TRANSITION_DELAY)
             setTimeout(() => {
-                this.setState({ turningBack: false,})
-            }, 1000)
-            
+                this.setState({ turningBack: false }, () => {
+                    this.props.onInMotion(false)
+                })
+            }, 800)
         } else {
             this.setState({
                 turning: true,
             })
 
             setTimeout(() => {
-                this.setState({ urlImage: this.props.image, turned: true, turning: false, })            
-            }, 1000)    
+                this.setState({ urlImage: this.props.image, turned: true, turning: false }, () => {
+                    this.props.onInMotion(false)
+                })
+            }, TRANSITION_DELAY)
         }
-
-      
     }
 
-   
-
     render() {
-        const { turning, turned, turningBack, urlImage  } = this.state
+        const { turning, turned, turningBack, urlImage } = this.state
 
-        const cardClass = classnames('card-content', { turning, turned, turningBack })
+        const cardClass  = classnames('card-content', { turning, turned, turningBack })
 
         return (
-            <div className="card">
-                <img className={cardClass}  src={urlImage}>
-                </img>
+            <div className="cardx">
+                <div className={cardClass}>
+                    <img className="card-image" src={urlImage} />
+                </div>
             </div>
         )
     }

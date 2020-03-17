@@ -1,8 +1,25 @@
-.card-view{
+.card-view {
     min-width: 1500px;
     max-width: 1500px;
     margin: auto;
 
+    .click-counter {
+        display: flex;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+
+        .count {
+            min-width: 3.5rem;
+            max-width: 3.5rem;
+        }
+
+        padding: 1rem 0 3rem;
+    }
+
+    &.disabled {
+        pointer-events: none;
+    }
 
     .card-content {
         display: inline-block;
@@ -22,7 +39,5 @@
             pointer-events: none;
             cursor: default;
         }
-
     }
-
 }

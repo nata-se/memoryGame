@@ -1,14 +1,15 @@
 import './styles/checkbox-container.scss'
 
 
-import React from 'react'
+import React     from 'react'
+import PropTypes from 'prop-types'
 
 import checkboxes from './checkboxes.js'
 
 
  class CheckboxContainer extends React.Component {
-    state = {
-        checkedItems:  [],
+    static propTypes = {
+        checkedItems: PropTypes.array.isRequired,
     }
  
     handleChange = (e) => {
@@ -17,23 +18,20 @@ import checkboxes from './checkboxes.js'
                 return checkbox.key === e.target.name
             })
     
-            const checkedItems = this.state.checkedItems.slice()
+            const checkedItems = this.props.checkedItems.slice()
             checkedItems.push(value)
     
-            this.setState({ checkedItems })
             this.props.onSelectionChange(checkedItems)
         } else {
-            const checkedItems = this.state.checkedItems.filter((checkbox) => {
+            const checkedItems = this.props.checkedItems.filter((checkbox) => {
                 return checkbox.key !== e.target.name
             })
-
-            this.setState({ checkedItems })
             this.props.onSelectionChange(checkedItems)
         }
     }
 
-    render(){
-        const { checkedItems } = this.state
+    render() {
+        const { checkedItems } = this.props
 
         return (
             <div className="checkbox-container">
