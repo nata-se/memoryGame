@@ -124,7 +124,7 @@ export default class CardView extends React.Component {
         
         {/* <h1>you have clicked  {this.state.clickCounter}  times</h1> */}
         <div className="click-counter">
-          <div>you have clicked</div>
+          <div>You have clicked</div>
           <div className="count">{this.state.clickCounter}</div>
           <div>times</div>
         </div>

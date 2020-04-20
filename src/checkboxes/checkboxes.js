@@ -3,7 +3,7 @@
 const checkboxes = [
     {
       key:   'toys1',
-      label: 'fluffy toys',
+      label: 'Fluffy Toys',
     },
     {
       key:   'toys2',
